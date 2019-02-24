@@ -26,7 +26,7 @@ void TMatrix::m_show()
     cout<<endl;
 }
 TMatrix::~TMatrix()
-{
+{//просто все удаляем
     if(m_data)
     {
         for(int i = 0; i < m_row - 1; i++)
@@ -39,6 +39,7 @@ TMatrix::~TMatrix()
 }
 void TMatrix::resize(int m_row, int m_col)
 {
+    //по смылсу то же, что и в векторах, только как дял строк, так и для столбцов
     int min_row = this->m_row < m_row ? this->m_row : m_row;
     if (this->m_col != m_col)
         {
@@ -68,15 +69,15 @@ void TMatrix::resize(int m_row, int m_col)
 }
 TMatrix& TMatrix::operator = (const TMatrix& X)
 {
-    if(this != &X)
+    if(this != &X) //если наша матрица не есть матрица, которую хотим скопировать
     {
-        this->~TMatrix();
-        resize(X.m_row, X.m_col);
-        for(int i = 0; i < m_row; i++)
+        this->~TMatrix(); //удаляем ее
+        resize(X.m_row, X.m_col); //выставляем требуемы размер
+        for(int i = 0; i < m_row; i++)//поэлеметно перетаскиваем коипруемую матрицу в нашу матрицу
             memcpy(m_data[i], X.m_data[i], sizeof(long double)*m_row);
     }
 
-    return *this;
+    return *this; //иначе возвращаем ее же
 
 }
 TMatrix TMatrix::operator + (const TMatrix& X)const
@@ -155,7 +156,7 @@ TMatrix& TMatrix::transpose()
     return *this;
 }
 long double TMatrix::det()
-{
+{//да да, тот самый рекурсивный метод, мне он нравится
     int i,j;
     long double det = 0;
     assert(this->m_row == this->m_col);
@@ -219,15 +220,15 @@ TMatrix& TMatrix::swapRows(int pos, int newPos)
 }
 TMatrix TMatrix::operator !()const
 {
-    TMatrix R(m_row,m_row);
-            TMatrix M;
-            M = *this;
+    TMatrix R(m_row,m_row); //эту матрицу будем возвращать из метода, чтобы не ломать исходную
+            TMatrix M;//в эту матрицу скопируем исходную матрицу
+            M = *this;//чтобы так же не ломать исходную
             TMatrix I(m_row,m_row);
             I = I.I(m_row);
             long double element = 0;
             for(int i = 0; i < m_row; i++){
                 element = m_data[i][i];
-                if(element == 0){
+                if(element == 0){//если на главной диагонали нулевой элемент, меняем строки местами
                     bool swapFlag = false;
                     for(int s = i; s < m_row; s++){
                         if(m_data[s][i] != 0){
@@ -238,7 +239,7 @@ TMatrix TMatrix::operator !()const
                     }
                     if(swapFlag == false)
                         break;
-                }
+                }//далее все по алгоритму. впринципе работает корректно
                 element = m_data[i][i];
                 for(int k = 0; k < m_row; k++){
                     m_data[i][k] = m_data[i][k]/element;
