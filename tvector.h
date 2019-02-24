@@ -4,22 +4,18 @@
 #include <cassert>
 #include <cstring>
 #include <math.h>
-/* Класс, реализующий основные операции векторной алгебры:
- * сложение(вычитание) векторов,
- * произведение вектора на число, скалярное произведение векторов,
- * векторное произведение векторов, нормирование вектора
- * */
+
 using namespace std;
 class TVector
 {
 private:
     int v_length;
-    long double* v_data;
+    long double* v_data; //указатель на первый элемент массива
 public:
-  TVector();
-  TVector(int length);
-  TVector(const TVector& arg);
-  virtual ~TVector();
+  TVector(); //конструктор по умолчанию
+  TVector(int length);//конструктор по размеру
+  TVector(const TVector& arg);//конструктор копирования, не реализован 
+  virtual ~TVector(); //виртуальный деструктор
   int size() {return v_length;}
   void resize(int length);
   TVector& operator = (const TVector& arg);
@@ -31,8 +27,8 @@ public:
   TVector operator - (const TVector& arg)const;
   TVector& normalize();
   long double vector_length(bool screen);
-  void v_show() const;
-  void v_show(int n) const;
+  void v_show() const; //метод вывода вектора на экран
+  void v_show(int n) const; //метод вывода вектора на экран (n первых элементов)
 };
 
 #endif // TVECTOR_H
