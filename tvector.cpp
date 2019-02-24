@@ -4,7 +4,7 @@ using namespace std;
 TVector::TVector()
 {
     v_length = 0;
-    v_data = NULL;
+    v_data = NULL; // возможно следует делать так: if(v_data) {delete[]v_data;} v_data = nullptr;
 }
 TVector::TVector(int length)
 {
@@ -14,14 +14,20 @@ TVector::TVector(int length)
 }
 void TVector::resize(int length)
 {
-    long double *new_data = new long double[length];
-    if(v_data)
+    /*чтобы скопировать один динам масив в другой (в общем случае разных длин) необходимо:
+    1) создать новый пустой динам массив той же длины, что и копируемый
+    2) любым способом переместить элементы
+    3) удалить старый массив, чтобы не было утечек в памяти
+    */
+    long double *new_data = new long double[length]; //1)
+    if(v_data) //если v_data не nullptr
     {
-        int min_length = (this->v_length < length) ? this->v_length : length;
-        memcpy(new_data, this->v_data, sizeof(long double)*min_length);
-        v_data = NULL;
+        int min_length = (this->v_length < length) ? this->v_length : length; //выбирыаем длину нового массива, как меньшую из текущей и новой
+        memcpy(new_data, this->v_data, sizeof(long double)*min_length); //из текущего массива перемещаем количество элементов
+        v_data = NULL;                                                  //sizeof(long double)*min_length в новый массив      
+                                                                        //оставшиеся элементы удаляем
     }
-       this->v_data = new_data;
+       this->v_data = new_data; 
        v_length = length;
 }
 void TVector::v_show() const
@@ -45,25 +51,26 @@ void TVector::v_show(int n) const
     cout<<endl;
 }
 TVector& TVector::operator = (const TVector& arg)
-{
+{ // смысл тот же, как в resize - если текущий вектор и тот, к который копируем, разных размеров, если текущий не пустой - 
+    // удаляем все содержимое, переопределяем динам масив v_data длинной равной длине вектора, который копируем
     if(v_length != arg.v_length)
     {
         if(v_data)
-            v_data = NULL; //delete[]v_data; v_data = nullptr; // ~TVector();
+            v_data = NULL; //delete[]v_data; v_data = nullptr; // ~TVector(); возможно стоит делать так, или же вызывать деструктор
         v_data = new long double(arg.v_length);
         v_length = arg.v_length;
     }
-
+    // полностью копируем массив - аргумент в текущий массив.
     memcpy(v_data,arg.v_data, sizeof(long double)*v_length);
     return *this;
 }
 TVector::~TVector()
-{
+{// просто все удаляем
     if(v_data)
-        v_data = NULL; //delete[]v_data; v_data = nullptr;
+        v_data = NULL; //delete[]v_data; v_data = nullptr; возможно это делается так, надо тестить
     v_length = 0;
 }
-TVector TVector::operator *(long double arg) const
+TVector TVector::operator *(long double arg) const //умножение вектора на число
 {
     TVector res;
     for(int i = 0; i < v_length; i++)
@@ -72,7 +79,7 @@ TVector TVector::operator *(long double arg) const
     }
     return res;
 }
-long double TVector::operator *(const TVector& arg) const
+long double TVector::operator *(const TVector& arg) const // скалярно умножение 
 {
     assert(v_length == arg.v_length);
     long double res = 0;
@@ -82,7 +89,7 @@ long double TVector::operator *(const TVector& arg) const
     }
     return res;
 }
-TVector TVector::operator ^ (const TVector& arg) const
+TVector TVector::operator ^ (const TVector& arg) const //векторное умножение, по хорошему нужно сделать для любого случая
 {
     assert(v_length == arg.v_length);
     TVector res(3);
@@ -91,7 +98,7 @@ TVector TVector::operator ^ (const TVector& arg) const
     res[2] = v_data[0]*arg[1] - arg[0]*v_data[1];
     return res;
 }
-long double TVector::vector_length(bool screen)
+long double TVector::vector_length(bool screen) // длина вектора, bool screen - выводить на экран или нет
 {
     long double res = 0;
     for(int i = 0 ; i < v_length; i++)
@@ -102,7 +109,7 @@ long double TVector::vector_length(bool screen)
         cout<<"vector's length = "<<sqrt(res)<<endl;
     return sqrt(res);
 }
-TVector& TVector::normalize()
+TVector& TVector::normalize() //нормализация вектора, каждый элемент делим на длину
 {
     long double length = vector_length(false);
     for(int i = 0; i < v_length; i++)
