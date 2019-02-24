@@ -6,9 +6,11 @@ CONFIG -= qt
 SOURCES += main.cpp \
     tvector.cpp \
     tmatrix.cpp \
-    tquaternion.cpp
+    tquaternion.cpp \
+    white_noise.cpp
 
 HEADERS += \
     tvector.h \
     tmatrix.h \
-    tquaternion.h
+    tquaternion.h \
+    white_noise.h
