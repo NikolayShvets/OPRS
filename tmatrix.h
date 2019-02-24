@@ -33,7 +33,7 @@ public:
     TMatrix operator * (const TMatrix& X) const;
     TMatrix operator * (long double x) const;
     TMatrix& transpose ();
-    TMatrix I (int m_row);//формирование единичной матрицы на основе той, из которой будет вызван метод, исходную не ломает
+    TMatrix I (int m_row);//формирование единичной матрицы, исходную не ломает
     TMatrix operator !()const; //инверс методом Гаусса
     TMatrix& swapRows(int pos, int newPos);
     long double det();//определеитель
