@@ -33,7 +33,7 @@ TMatrix::~TMatrix()
             delete [] m_data[i];
         delete[] m_data;
     }
-    m_data = nullptr;
+    m_data = nullptr;//плесс чекни чем отличается результат, если мы просто сделаем delete[]m_data или же m_data = nullptr (нуль поинтер) 
     m_row = m_col = 0;
 
 }
