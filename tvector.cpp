@@ -12,6 +12,12 @@ TVector::TVector(int length)
     v_data = NULL;
     resize(length);
 }
+
+TVector::TVector(const TVector &arg)
+{
+    resize(arg.size());
+    for ( int i = 0; i < size(); i++) v_data[i] = arg[i];
+}
 void TVector::resize(int length)
 {
     /*чтобы скопировать один динам масив в другой (в общем случае разных длин) необходимо:
@@ -30,6 +36,7 @@ void TVector::resize(int length)
        this->v_data = new_data; 
        v_length = length;
 }
+
 void TVector::v_show() const
 {
     int counter = 0;

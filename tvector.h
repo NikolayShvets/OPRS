@@ -16,7 +16,7 @@ public:
   TVector(int length);//конструктор по размеру
   TVector(const TVector& arg);//конструктор копирования, не реализован 
   virtual ~TVector(); //виртуальный деструктор
-  int size() {return v_length;} //возвращаем размер вектора
+  int size()const {return v_length;} //возвращаем размер вектора
   void resize(int length);
   TVector& operator = (const TVector& arg);
   long double& operator [] (int i)const {return v_data[i];}//опереатор доступа к элементу
